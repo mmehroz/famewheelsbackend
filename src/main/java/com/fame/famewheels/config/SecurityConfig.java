@@ -96,8 +96,11 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-//        config.addAllowedOrigin("http://192.168.18.246:3000"); 
-        config.addAllowedOrigin("*");// Add the allowed origin(s)
+        config.addAllowedOrigin("http://192.168.18.246:3000"); 
+        config.addAllowedOrigin("http://192.168.18.8:3000");// Add the allowed origin(s)
+        config.addAllowedOrigin("https://famewheels.com");// Add the allowed origin(s)
+        config.addAllowedOrigin("http://146.71.76.22:3000");
+        config.addAllowedOrigin("http://192.168.2.109:3000");
         config.addAllowedHeader("*"); // Allow all headers
         config.addAllowedMethod("*"); // Allow all HTTP methods
         source.registerCorsConfiguration("/**", config);

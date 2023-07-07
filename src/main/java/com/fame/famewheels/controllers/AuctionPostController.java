@@ -1,6 +1,5 @@
 package com.fame.famewheels.controllers;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +42,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.jsonwebtoken.io.IOException;
 import jakarta.validation.Valid;
 
 @RestController
@@ -69,18 +69,9 @@ public class AuctionPostController {
 
 	@PostMapping("/createAuctionPost")
 	public ResponseEntity<?> createAuctionPost(@Valid @ModelAttribute  AuctionPostDto auctionPost, BindingResult result,
-			@Valid @RequestParam String userData, @Valid @RequestParam String postData, @Valid @RequestParam MultipartFile[] imageFiles)
-					throws IOException{
+			@Valid @RequestParam String userData, @Valid @RequestParam String postData,
+			@Valid @RequestParam(required=false) MultipartFile[] imageFiles){
 		
-		if (result.hasErrors()) {
-	        // If there are validation errors, return a bad request response with detailed error messages
-	        List<FieldError> errors = result.getFieldErrors();
-	        List<String> errorMessages = new ArrayList<>();
-	        for (FieldError error : errors) {
-	            errorMessages.add(error.getField()+error.getDefaultMessage());
-	        }
-	        return ResponseEntity.badRequest().body(errorMessages);
-	    }
 		logger.info("auctionPost {}", auctionPost);
 		logger.info("user {}", userData);
 		logger.info("post {}", postData);
@@ -107,10 +98,13 @@ public class AuctionPostController {
 		
 		//Check if there are more than 10 Auction Posts for today
 		String date=auctionPost.getAuctionDate();
-		int getPostCount=this.auctionPostService.getPostCountForToday(date);
+		String time=auctionPost.getAuctionStartTime();
+		int getPostCount=this.auctionPostService.getPostCountForToday(date, time);
 		if(getPostCount>=10) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Post Limit Exceeded for today");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Post Limit Exceeded for for the auction time selected!"
+					+ " Please select another time slot.");
 		}else {
+			
 			if (result.hasErrors()) {
 		        // If there are validation errors, return a bad request response with detailed error messages
 		        List<FieldError> errors = result.getFieldErrors();
@@ -155,7 +149,8 @@ public class AuctionPostController {
 				
 				return ResponseEntity.ok("form Submitted Successfully!!");
 				//add values in auctionpost table
-				}catch(ResourceNotFoundException e) {
+				}
+			catch(ResourceNotFoundException e) {
 					
 					String errorMessage = e.getMessage();
 			        return ResponseEntity.badRequest().body(errorMessage);
@@ -166,10 +161,13 @@ public class AuctionPostController {
 			catch (Exception e) {
 		        // Handle other exceptions and return a generic error response
 		        String errorMessage = "Failed to submit post. Please try again later.";
-		        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+		        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage+e.getMessage());
 		        }
+//			catch(IOException e) {
+//		        	return ResponseEntity.badRequest().body("Images can not be empty! Please upload images.");
+//		        }
 			}
-		}
+	}
 		
 	
 	@GetMapping("/getUpcomingPost")

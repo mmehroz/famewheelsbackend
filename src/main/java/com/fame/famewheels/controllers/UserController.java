@@ -125,10 +125,16 @@ public class UserController {
 	
 	//update user
 	@PutMapping("/users/{userId}")
-	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable Integer userId)
+	public ResponseEntity<?> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable Integer userId)
 	{
-		UserDto updatedUser = this.userService.updateUser(userDto, userId);
-		return new ResponseEntity<UserDto>(updatedUser,HttpStatus.OK);
+		try {
+			UserDto updatedUser = this.userService.updateUser(userDto, userId);
+			return new ResponseEntity<>(updatedUser,HttpStatus.OK);
+		}catch(ResourceNotFoundException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}catch(Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+			}
 	}
 	
 	//delete user

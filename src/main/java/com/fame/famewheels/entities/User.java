@@ -78,6 +78,9 @@ public class User implements UserDetails {
 	@OneToMany(mappedBy ="user", fetch = FetchType.LAZY)
 	private List<Bid> bid=new ArrayList<>();
 	
+	@OneToMany(mappedBy="user", fetch=FetchType.LAZY)
+	private List<Wishlist> wishlist=new ArrayList<>();
+	
 	@ManyToOne
 	@JoinColumn(name="Role_id")
 	private Role role;

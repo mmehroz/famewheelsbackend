@@ -19,7 +19,7 @@ public interface AuctionPostService {
 	
 	AuctionPostDto getAuctionPostById(int auctionPostId);
 	
-	int getPostCountForToday(String date);
+	int getPostCountForToday(String date, String time);
 	
 	Map<String, Integer> getPostCount();
 

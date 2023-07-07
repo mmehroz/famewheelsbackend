@@ -20,7 +20,7 @@ public interface AuctionPostRepository extends JpaRepository<AuctionPost, Intege
 	@Query(value="Select * from auction_post where auction_date=:date and auction_start_time<=:time and auction_end_time>=:time",
 			nativeQuery=true)
 	List<AuctionPost> findCurrentPost(@Param("date") String date, @Param("time") String time);
-	
+
 	@Query(value="Select count(auction_post_id) from auction_post where auction_date=:date and auction_start_time>:time ", 
 			nativeQuery=true)
 	int getUpcomingPostCount(@Param("date") String date, @Param("time") String time);

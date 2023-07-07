@@ -75,7 +75,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 	@Query(value="Select * from post where post_type_id=:typeId and status=1", nativeQuery=true)
 	Page<Post> getByTypeAndStatus(@Param("typeId") Integer typeId, Pageable p);
 	
-	@Query(value="SELECT count(auction_post_id) FROM auction_post WHERE auction_date=:date", nativeQuery=true)
-	int getPostCountForToday(@Param("date") String date);
+	@Query(value="SELECT count(auction_post_id) FROM auction_post WHERE auction_date=:date and auction_start_time=:time", nativeQuery=true)
+	int getPostCountForToday(@Param("date") String date, @Param("time") String time);
 	
 }

@@ -12,7 +12,7 @@ public class BidDto {
 	
 	private int bidId;
 	
-	@NotEmpty(message="BidAmount Type is required")
+	@NotEmpty(message="BidAmount is required")
 	private String BidAmount;
 	
 	

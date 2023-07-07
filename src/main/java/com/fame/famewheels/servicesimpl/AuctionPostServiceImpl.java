@@ -1,5 +1,5 @@
 package com.fame.famewheels.servicesimpl;
-import java.util.HashMap;
+
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -33,7 +33,7 @@ import com.fame.famewheels.repositories.UserRepository;
 import com.fame.famewheels.services.AuctionPostService;
 import com.fame.famewheels.services.PostService;
 import com.fame.famewheels.services.UserService;
-
+import java.util.HashMap;
 
 @Service
 public class AuctionPostServiceImpl implements AuctionPostService {
@@ -116,13 +116,12 @@ public class AuctionPostServiceImpl implements AuctionPostService {
 		return this.modelMapper.map(getById, AuctionPostDto.class);
 	}
 	@Override
-	public int getPostCountForToday(String date) {
+	public int getPostCountForToday(String date, String time) {
 //		SimpleDateFormat ndate=new SimpleDateFormat("yyyy-MM-dd");
 //		Date getDate=new Date();
-		int PostCount=this.postRepository.getPostCountForToday(date);
+		int PostCount=this.postRepository.getPostCountForToday(date, time);
 		return PostCount;
 	}
-	
 	@Override
 	public Map<String, Integer> getPostCount() {
 		SimpleDateFormat ndate=new SimpleDateFormat("yyyy-MM-dd");

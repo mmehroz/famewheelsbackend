@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.fame.famewheels.dto.BidDto;
@@ -58,10 +59,12 @@ public class BidServiceImpl implements BidService {
 
 	@Override
 	public List<BidDto> getAllBidsByPostId(int auctionPostId) {
+//		Sort sortData=Sort.by("bidAmount");
+		
 		AuctionPost post= this.auctionPostRepository.findById(auctionPostId).
 				orElseThrow(() -> new ResourceNotFoundException("AuctionPost", "auctionPostId", auctionPostId));
 		
-		List<Bid> getBids= this.bidRepository.findByAuctionPost(post);
+		List<Bid> getBids= this.bidRepository.findByAuctionPost(auctionPostId);
 //		if(getBids==null) {
 //			throw new ResourceNotFoundException("Bid", "bidId", )
 //		}
